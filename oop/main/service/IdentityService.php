@@ -13,6 +13,7 @@ namespace org\camunda\php\sdk\service;
 use Exception;
 use org\camunda\php\sdk\entity\request\IdentityRequest;
 use org\camunda\php\sdk\entity\response\Identity;
+use org\camunda\php\sdk\entity\response\IdentityVerify;
 
 class IdentityService extends RequestService {
 
@@ -29,6 +30,27 @@ class IdentityService extends RequestService {
     $this->setRequestUrl('/identity/groups');
     $this->setRequestObject($request);
     $this->setRequestMethod('GET');
+
+    try {
+      return $identity->cast($this->execute());
+    } catch (Exception $e) {
+      throw $e;
+    }
+  }
+  
+  /**
+   * Verifies that user credentials are valid.
+   * @link http:https://docs.camunda.org/manual/7.9/reference/rest/identity/verify-user/
+   *
+   * @param IdentityRequest $request
+   * @return IdentityVerify $this
+   * @throws \Exception
+   */
+   public function verifyUser(IdentityRequest $request) {
+    $identity = new IdentityVerify();
+    $this->setRequestUrl('/identity/verify');
+    $this->setRequestObject($request);
+    $this->setRequestMethod('POST');
 
     try {
       return $identity->cast($this->execute());
